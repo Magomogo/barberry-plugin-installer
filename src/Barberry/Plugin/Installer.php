@@ -12,15 +12,15 @@ class Installer extends LibraryInstaller
 
     public function getInstallPath(PackageInterface $package)
     {
-        $prefix = substr($package->getPrettyName(), 0, 23);
+        $prefix = substr($package->getPrettyName(), 0, 16);
         if ('barberry/plugin-' !== $prefix) {
             throw new \InvalidArgumentException(
-                'Unable to install template, phpdocumentor templates '
+                'Unable to install plugin, barberry plugins '
                     .'should always start their package name with '
-                    .'"phpdocumentor/template-"'
+                    .'"barberry/plugin-"'
             );
         }
 
-        return 'plugins/'.substr($package->getPrettyName(), 16);
+        return 'plugins/' . substr($package->getPrettyName(), 16);
     }
 }
