@@ -28,7 +28,7 @@ class Installer extends LibraryInstaller
         parent::install($repo, $package);
 
         $this->registerAutoloader($package);
-        $this->installDirections($package, $pluginName);
+        $this->installPlugin($package, $pluginName);
     }
 
     public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target)
@@ -37,7 +37,7 @@ class Installer extends LibraryInstaller
         parent::update($repo, $initial, $target);
 
         $this->registerAutoloader($target);
-        $this->installDirections($target, $pluginName);
+        $this->installPlugin($target, $pluginName);
     }
 
     private function registerBarberryInterfacesAutoloader($composer)
@@ -59,7 +59,7 @@ class Installer extends LibraryInstaller
         $classLoader->register();
     }
 
-    private function installDirections($package, $pluginName)
+    private function installPlugin($package, $pluginName)
     {
         $tempPath = $this->getInstallPath($package) . '/tmp';
         $this->filesystem->ensureDirectoryExists($tempPath);
@@ -72,7 +72,8 @@ class Installer extends LibraryInstaller
 
         $installerClassName = '\\Barberry\\Plugin\\' . $pluginName . '\\Installer';
         $installer = new $installerClassName($tempPath . '/');
-        $installer->install(new DirectionComposer($directionPath . '/'), new MonitorComposer($monitorPath . '/'));
+        $installer->install(new DirectionComposer($directionPath . '/'), new MonitorComposer($monitorPath . '/'),
+            self::readPluginParameters($this->composer->getPackage()->getExtra(), $package->getPrettyName()));
     }
 
     private static function assertBarberryPlugin(PackageInterface $package)
@@ -87,6 +88,11 @@ class Installer extends LibraryInstaller
         }
 
         return ucfirst(substr($package->getPrettyName(), 16));
+    }
+
+    private static function readPluginParameters(array $extra, $pluginPackageName)
+    {
+        return array_key_exists($pluginPackageName, $extra) ? $extra[$pluginPackageName] : array();
     }
 
 }
