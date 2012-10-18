@@ -1,6 +1,7 @@
 <?php
 namespace Barberry\Plugin;
 use Barberry\Direction\Composer as DirectionComposer;
+use Barberry\Monitor\Composer as MonitorComposer;
 use Composer\Package\PackageInterface;
 use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
@@ -66,9 +67,12 @@ class Installer extends LibraryInstaller
         $directionPath = $this->vendorDir . '/../barberry-directions';
         $this->filesystem->ensureDirectoryExists($directionPath);
 
+        $monitorPath = $this->vendorDir . '/../barberry-monitors';
+        $this->filesystem->ensureDirectoryExists($monitorPath);
+
         $installerClassName = '\\Barberry\\Plugin\\' . $pluginName . '\\Installer';
         $installer = new $installerClassName($tempPath . '/');
-        $installer->install(new DirectionComposer($directionPath . '/'));
+        $installer->install(new DirectionComposer($directionPath . '/'), new MonitorComposer($monitorPath . '/'));
     }
 
     private static function assertBarberryPlugin(PackageInterface $package)
