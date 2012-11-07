@@ -71,9 +71,12 @@ class Installer extends LibraryInstaller
         $this->filesystem->ensureDirectoryExists($monitorPath);
 
         $installerClassName = '\\Barberry\\Plugin\\' . $pluginName . '\\Installer';
-        $installer = new $installerClassName($tempPath . '/');
-        $installer->install(new DirectionComposer($directionPath . '/'), new MonitorComposer($monitorPath . '/'),
-            self::readPluginParameters($this->composer->getPackage()->getExtra(), $package->getPrettyName()));
+        $installer = new $installerClassName();
+        $installer->install(
+            new DirectionComposer($directionPath . '/', $tempPath . '/'),
+            new MonitorComposer($monitorPath . '/', $tempPath . '/'),
+            self::readPluginParameters($this->composer->getPackage()->getExtra(), $package->getPrettyName())
+        );
     }
 
     private static function assertBarberryPlugin(PackageInterface $package)
