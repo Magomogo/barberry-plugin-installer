@@ -2,6 +2,7 @@
 namespace Barberry\Plugin;
 use Barberry\Direction\Composer as DirectionComposer;
 use Barberry\Monitor\Composer as MonitorComposer;
+use Composer\Package\Package;
 use Composer\Package\PackageInterface;
 use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
@@ -54,7 +55,10 @@ class Installer extends LibraryInstaller
     private function registerAutoloader($package)
     {
         $generator = new AutoloadGenerator;
-        $map = $generator->parseAutoloads(array(array($package, $this->getInstallPath($package))));
+        $map = $generator->parseAutoloads(
+            array(array($package, $this->getInstallPath($package))),
+            new Package('dummy', '1.0.0.0', '1.0.0')
+        );
         $classLoader = $generator->createLoader($map);
         $classLoader->register();
     }
