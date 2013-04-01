@@ -4,6 +4,7 @@ use Barberry\Direction\Composer as DirectionComposer;
 use Barberry\Monitor\Composer as MonitorComposer;
 use Composer\Package\Package;
 use Composer\Package\PackageInterface;
+use Composer\Script\EventDispatcher;
 use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Autoload\AutoloadGenerator;
@@ -41,20 +42,18 @@ class Installer extends LibraryInstaller
         $this->installPlugin($target, $pluginName);
     }
 
-    private function registerBarberryInterfacesAutoloader($composer)
+    private function registerBarberryInterfacesAutoloader(Composer $composer)
     {
-        foreach ($composer->getRepositoryManager()->getLocalRepositories() as $repo) {
-            foreach ($repo->getPackages() as $package) {
-                if ($package->getName() === 'barberry/interfaces') {
-                    $this->registerAutoloader($package);
-                }
+        foreach ($composer->getRepositoryManager()->getLocalRepository()->getPackages() as $package) {
+            if ($package->getName() === 'barberry/interfaces') {
+                $this->registerAutoloader($package);
             }
         }
     }
 
     private function registerAutoloader($package)
     {
-        $generator = new AutoloadGenerator;
+        $generator = new AutoloadGenerator(new EventDispatcher($this->composer, $this->io));
         $map = $generator->parseAutoloads(
             array(array($package, $this->getInstallPath($package))),
             new Package('dummy', '1.0.0.0', '1.0.0')
