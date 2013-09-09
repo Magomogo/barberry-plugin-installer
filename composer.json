@@ -1,11 +1,16 @@
 {
     "name": "barberry/plugin-installer",
-    "type": "composer-installer",
+    "description": "barberry plugin installer",
+    "type": "composer-plugin",
     "license": "MIT",
     "autoload": {
         "psr-0": {"Barberry\\Plugin": "src/"}
     },
     "extra": {
-        "class": "Barberry\\Plugin\\Installer"
+        "class": "Barberry\\Plugin\\ComposerPlugin"
+    },
+    "require": {
+        "composer-plugin-api": "1.0.0",
+        "barberry/interfaces": "1.1.1"
     }
 }

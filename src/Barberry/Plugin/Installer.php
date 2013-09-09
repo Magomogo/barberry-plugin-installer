@@ -1,10 +1,11 @@
 <?php
 namespace Barberry\Plugin;
+
 use Barberry\Direction\Composer as DirectionComposer;
 use Barberry\Monitor\Composer as MonitorComposer;
 use Composer\Package\Package;
 use Composer\Package\PackageInterface;
-use Composer\Script\EventDispatcher;
+use Composer\EventDispatcher\EventDispatcher;
 use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Autoload\AutoloadGenerator;
@@ -15,13 +16,8 @@ class Installer extends LibraryInstaller
 {
     public function __construct(IOInterface $io, Composer $composer, $type = 'library')
     {
-        parent::__construct($io, $composer, 'composer-installer');
+        parent::__construct($io, $composer, $type);
         $this->registerBarberryInterfacesAutoloader($composer);
-    }
-
-    public function supports($packageType)
-    {
-        return 'barberry-plugin' === $packageType;
     }
 
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
