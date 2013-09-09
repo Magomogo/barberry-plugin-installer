@@ -9,17 +9,9 @@ use Composer\EventDispatcher\EventDispatcher;
 use Composer\Installer\LibraryInstaller;
 use Composer\Repository\InstalledRepositoryInterface;
 use Composer\Autoload\AutoloadGenerator;
-use Composer\IO\IOInterface;
-use Composer\Composer;
 
-class Installer extends LibraryInstaller
+class ComposerInstaller extends LibraryInstaller
 {
-    public function __construct(IOInterface $io, Composer $composer, $type = 'library')
-    {
-        parent::__construct($io, $composer, $type);
-        $this->registerBarberryInterfacesAutoloader($composer);
-    }
-
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         $pluginName = self::assertBarberryPlugin($package);
@@ -38,14 +30,7 @@ class Installer extends LibraryInstaller
         $this->installPlugin($target, $pluginName);
     }
 
-    private function registerBarberryInterfacesAutoloader(Composer $composer)
-    {
-        foreach ($composer->getRepositoryManager()->getLocalRepository()->getPackages() as $package) {
-            if ($package->getName() === 'barberry/interfaces') {
-                $this->registerAutoloader($package);
-            }
-        }
-    }
+//----------------------------------------------------------------------------------------------------------------------
 
     private function registerAutoloader($package)
     {
