@@ -45,7 +45,14 @@ class ComposerInstaller extends LibraryInstaller
 
     private function installPlugin($package, $pluginName)
     {
-        $tempPath = $this->getInstallPath($package) . '/tmp';
+        $extra = $this->composer->getPackage()->getExtra();
+
+        $tempPath = rtrim(
+            array_key_exists('barberry_plugins_temp_path', $extra) ?
+                $extra['barberry_plugins_temp_path'] : $this->getInstallPath($package) . '/tmp',
+            '/'
+        );
+
         $this->filesystem->ensureDirectoryExists($tempPath);
 
         $directionPath = $this->vendorDir . '/../barberry-directions';
@@ -59,7 +66,7 @@ class ComposerInstaller extends LibraryInstaller
         $installer->install(
             new DirectionComposer($directionPath . '/', $tempPath . '/'),
             new MonitorComposer($monitorPath . '/', $tempPath . '/'),
-            self::readPluginParameters($this->composer->getPackage()->getExtra(), $package->getPrettyName())
+            self::readPluginParameters($extra, $package->getPrettyName())
         );
     }
 
