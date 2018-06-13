@@ -11,6 +11,6 @@
     },
     "require": {
         "composer-plugin-api": "^1.0",
-        "barberry/interfaces": "^1.0"
+        "barberry/interfaces": "^2.0"
     }
 }
