@@ -20,4 +20,14 @@ class ComposerPlugin implements PluginInterface
         $installer = new ComposerInstaller($io, $composer, 'barberry-plugin');
         $composer->getInstallationManager()->addInstaller($installer);
     }
+
+    public function deactivate(Composer $composer, IOInterface $io)
+    {
+        // TODO: Implement deactivate() method.
+    }
+
+    public function uninstall(Composer $composer, IOInterface $io)
+    {
+        // TODO: Implement uninstall() method.
+    }
 }
