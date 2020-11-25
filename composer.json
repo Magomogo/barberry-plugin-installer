@@ -1,7 +1,7 @@
 {
     "name": "barberry/plugin-installer",
     "description": "barberry plugin installer",
-    "type": "composer-plugin",
+    "type": "composer-installer",
     "license": "MIT",
     "autoload": {
         "psr-0": {"Barberry\\Plugin": "src/"}
