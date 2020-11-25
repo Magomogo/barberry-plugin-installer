@@ -15,19 +15,23 @@ class ComposerInstaller extends LibraryInstaller
     public function install(InstalledRepositoryInterface $repo, PackageInterface $package)
     {
         $pluginName = self::assertBarberryPlugin($package);
-        parent::install($repo, $package);
+        $promise = parent::install($repo, $package);
 
-        $this->registerAutoloader($package);
-        $this->installPlugin($package, $pluginName);
+        return $promise->then(function () use ($package, $pluginName) {
+            $this->registerAutoloader($package);
+            $this->installPlugin($package, $pluginName);
+        });
     }
 
     public function update(InstalledRepositoryInterface $repo, PackageInterface $initial, PackageInterface $target)
     {
         $pluginName = self::assertBarberryPlugin($target);
-        parent::update($repo, $initial, $target);
+        $promise = parent::update($repo, $initial, $target);
 
-        $this->registerAutoloader($target);
-        $this->installPlugin($target, $pluginName);
+        return $promise->then(function () use ($target, $pluginName) {
+            $this->registerAutoloader($target);
+            $this->installPlugin($target, $pluginName);
+        });
     }
 
 //----------------------------------------------------------------------------------------------------------------------
