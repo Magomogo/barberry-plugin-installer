@@ -3,7 +3,7 @@ namespace Barberry\Plugin;
 
 use Barberry\Direction\Composer as DirectionComposer;
 use Barberry\Monitor\Composer as MonitorComposer;
-use Composer\Package\Package;
+use Composer\Package\RootPackage;
 use Composer\Package\PackageInterface;
 use Composer\EventDispatcher\EventDispatcher;
 use Composer\Installer\LibraryInstaller;
@@ -37,7 +37,7 @@ class ComposerInstaller extends LibraryInstaller
         $generator = new AutoloadGenerator(new EventDispatcher($this->composer, $this->io));
         $map = $generator->parseAutoloads(
             array(array($package, $this->getInstallPath($package))),
-            new Package('dummy', '1.0.0.0', '1.0.0')
+            new RootPackage('dummy', '1.0.0.0', '1.0.0')
         );
         $classLoader = $generator->createLoader($map);
         $classLoader->register();
