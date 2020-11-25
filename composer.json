@@ -8,8 +8,7 @@
     },
     "extra": {
         "class": [
-            "Barberry\\Plugin\\ComposerPlugin",
-            "Barberry\\Plugin\\ComposerInstaller"
+            "Barberry\\Plugin\\ComposerPlugin"
         ]
     },
     "require": {
